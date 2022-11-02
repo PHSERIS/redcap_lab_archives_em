@@ -1,0 +1,76 @@
+{
+	"name": "MGB LabArchives",
+
+	"namespace": "MGB\\uploadToLabarchives",
+
+	"authors": [
+		{
+			"name": "Ed Morales ",
+			"email": "emorales@bwh.harvard.edu",
+			"institution": "MGB"
+		}
+	],
+
+	"permissions": [
+		"redcap_every_page_top",
+		"redcap_module_system_enable"
+	],
+
+	"description": "REDCap users can upload REDCap reports to their own LabArchives notebook by establishing a connection to their LabArchives account.",
+
+	"links": {
+		"control-center": [
+			{
+				"name": "LabArchives - Admin Control",
+				"icon": "user",
+				"url": "plugins/adminControl.php"
+			}
+		],
+		"project": [
+		]
+	},
+	"system-settings": [
+		{
+			"key": "la-api-region-list",
+			"name": "Specify the available API regions",
+			"required": true,
+			"type": "sub_settings",
+			"repeatable":true,
+			"sub_settings":[
+				{
+					"key": "region-name",
+					"name": "Display name",
+					"required": true,
+					"type": "text"
+				},
+				{
+					"key": "region-api-url",
+					"name": "API URL",
+					"required": true,
+					"type": "text"
+				},
+				{
+					"key": "region-akid",
+					"name": "AKID",
+					"required": true,
+					"type": "text"
+				},
+				{
+					"key": "region-inst-password",
+					"name": "Password",
+					"required": true,
+					"type": "password"
+				},
+				{
+					"key": "region-sso-entity-id",
+					"name": "SSO Entity ID",
+					"required": true,
+					"type": "text"
+				}
+			]
+		}
+	],
+	
+	"project-settings": [
+	]
+}
