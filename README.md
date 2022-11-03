@@ -117,7 +117,7 @@ _**LabArchives Current List of Region display names and their api urls are:**_
   United Kingdom:          https://ukapi.labarchives.com
   U.S. and rest of world:  https://api.labarchives.com
 ```
-A future update will use an API call to automatically retrieve the full list from LabArcives.
+A future update will use an API call to automatically retrieve the full list from LabArchives.
 
 2. **Specify** _Region's Display name_
 3. **Specify** _Region's API URL_

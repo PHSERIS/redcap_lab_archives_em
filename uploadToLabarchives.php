@@ -130,9 +130,9 @@ class uploadToLabarchives extends \ExternalModules\AbstractExternalModule
 
         if (strlen(strstr(PAGE,"DataExport/index.php")) > 0
             and $_GET['pid'] == $project_id
-            and !is_null($_GET['report_id'])){
+            and !is_null( htmlspecialchars($_GET['report_id'],ENT_QUOTES) )){
 
-            if($_GET['report_id'] == "ALL") return;
+            if(htmlspecialchars($_GET['report_id'],ENT_QUOTES) == "ALL") return;
 
             $modalContent = $this->minifier($this->modalContent($project_id));
 
@@ -793,7 +793,7 @@ SCRIPT;
             }
 
             $nBDropdown = $this->dropdownMenu('laNotebook', $laNotebooks, 'Select Notebook: ');
-            $reportID = $_GET['report_id'];
+            $reportID = (int) $_GET['report_id'];
             $reportName = DataExport::getReportNames($reportID, $applyUserAccess=false, $fixOrdering=true, $useFolderOrdering=true);
 
             $transferLink = $this->getUrl("plugins/transfer.php", $noAuth = false, $useApiEndpoint = false);
@@ -806,7 +806,7 @@ SCRIPT;
         $('#spiner333').css("display", "inline-block");
         
         var laNotebook = $('#laNotebook').val();
-        var rid = "{$_GET['report_id']}";
+        var rid = "$reportID";
 
         var dataset= "{" +
             "\"nbSelection\":" + "\"" +laNotebook + "\"" + "," +
