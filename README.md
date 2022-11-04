@@ -2,9 +2,13 @@
 
 With collaboration from LabArchives, and to facilitate best practices for data storage, the MGB REDCap team envisioned and developed the LabArchives External Module (EM) as an interface into a user's LabArchives Notebooks. The EM meets essential LabArchives integration requirements, suppports customization at the insitution level (by a REDCap Administrator), and it can successfully upload REDCap reports into the user's LabArchives notebooks. 
 
+In order to use this module, your organization must have an Enterprise license for LabArchives, and your organization's REDCap Administrator must enable it, and must configure it, as described in "Information for REDCap Administrators," below. 
+
 ## Expected Use-Case
 
-The LabArchives EM enables a REDCap user to upload a REDCap report into their LabArchives notebook without leaving REDCap. Once a REDCap user establishes a connection between REDCap and LabArchives, the user can upload REDCap reports from any of their REDCap projects, into any LabArchives notebook they own.
+The LabArchives EM enables a REDCap user to upload a REDCap report into their LabArchives notebook without leaving REDCap. Once a REDCap user establishes a connection between REDCap and LabArchives, the user can upload REDCap reports from any of their REDCap projects on which the module has been enabled, into any LabArchives notebook they own.
+
+# Information for REDCap users/Researchers
 
 ## Workflow Overview
 
