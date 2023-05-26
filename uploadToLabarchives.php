@@ -696,7 +696,7 @@ function linkNow(){
             var laToken = $('#laToken').val();
             var region = $('#regionSelect').val();
             var tmpUser = '{$tempID}';
-            console.log("This is the current user: " + tmpUser);
+
             var dataset= "{" + "\"" + tmpUser +"\"" + ":" +
                 "{\"" + tmpUser + "\":" +
                 "{" +

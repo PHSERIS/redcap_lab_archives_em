@@ -116,10 +116,10 @@ Before your users can upload from REDCap to LabArchives, your institution needs 
 
 _**LabArchives Current List of Region display names and their api urls are:**_
 ```
-  Australia / New Zealand: https://auapi.labarchives.com
-  Europe outside of UK:    https://euapi.labarchives.com
-  United Kingdom:          https://ukapi.labarchives.com
-  U.S. and rest of world:  https://api.labarchives.com
+  Australia / New Zealand: https://auapi.labarchives.com/api/
+  Europe outside of UK:    https://euapi.labarchives.com/api/
+  United Kingdom:          https://ukapi.labarchives.com/api/
+  North America:           https://api.labarchives.com/api/
 ```
 A future update will use an API call to automatically retrieve the full list from LabArchives.
 
@@ -132,6 +132,12 @@ A future update will use an API call to automatically retrieve the full list fro
 If your organization has more than one set of credentials, add a new instance of the field named _Specify the available API regions:_ and repeat
 
 Please consult your LabArchives representative if you have any questions about these items for your institution.
+
+## REDCap on IIS Servers Not Supported
+We aware that this integration is not supported on IIS servers. A future update is planned to provide support.
+
+## Firewall May Block File Uploads
+If you're able to make a connection but file upload continuously fails, please check to see if the issue is being caused by your firewall. 
 
 ## REDCap Admin Tool for Disconnecting a User's REDCap Account from LabArchives
 
