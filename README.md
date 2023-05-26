@@ -119,7 +119,7 @@ _**LabArchives Current List of Region display names and their api urls are:**_
   Australia / New Zealand: https://auapi.labarchives.com
   Europe outside of UK:    https://euapi.labarchives.com
   United Kingdom:          https://ukapi.labarchives.com
-  U.S. and rest of world:  https://api.labarchives.com
+  U.S. and rest of world:  https://api.labarchives.com/api/
 ```
 A future update will use an API call to automatically retrieve the full list from LabArchives.
 
