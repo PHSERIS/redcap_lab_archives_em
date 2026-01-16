@@ -56,7 +56,7 @@ if(!empty($nbid)){
 
     if($targetFolderExists){
 
-            $module->addRECapFolderOrPageToNotebook($userUID, $nbid, $parent_tree_id, $call_type = "notebook", "false", $pageName);
+            $module->addRECapFolderOrPageToNotebook($userUID, $nbid, "false", $pageName, $parent_tree_id, $call_type = "notebook");
             // Get the page id (which is used for parent_tree_id or pid) of the newly create page in the REDCap Folder
             // Unfortunately, the page id is not returned on the LA API call that creates it and must be found by
             // parsing the existing notebook tree.
@@ -76,7 +76,7 @@ if(!empty($nbid)){
                     $pid = $noteBookFolders2["level-nodes"]["level-node"]["tree-id"];
                     $expires = number_format(microtime(true) * 1000, 0, "", "");
                     $sig = $module->build_signature("add_attachment", $expires, "notebook");
-                    $module->labArcAddAttachment($userUID, $filename, $module->LA_AKID, $caption, $nbid, $pid, $expires, $sig);
+                    $module->labArcAddAttachment($userUID, $filename, $module->LA_AKID, $caption, $expires, $sig, $nbid, $pid);
 
                 }
                 return;
@@ -92,7 +92,7 @@ if(!empty($nbid)){
                         $pid = $nbDetails["tree-id"];
                         $expires = number_format(microtime(true)*1000,0,"","");
                         $sig= $module->build_signature("add_attachment", $expires, "notebook");
-                        $module->labArcAddAttachment($userUID, $filename, $module->LA_AKID, $caption, $nbid, $pid, $expires, $sig);
+                        $module->labArcAddAttachment($userUID, $filename, $module->LA_AKID, $caption, $expires, $sig, $nbid, $pid);
 
                     }
 
@@ -102,7 +102,7 @@ if(!empty($nbid)){
     } else {
         // If it doesn't, then create it then attach the report
 
-        $addResponse = $module->addRECapFolderOrPageToNotebook($userUID,$nbid,$parent_tree_id = 0,$call_type = "notebook", "true","REDCap");
+        $addResponse = $module->addRECapFolderOrPageToNotebook($userUID,$nbid,"true","REDCap", $parent_tree_id = 0,$call_type = "notebook");
         // Get the folder id (which is used for parent_tree_id) of the newly create REDCap folder
         // Unfortunately, the folder id is not returned on the LA API call that creates it and must be found by
         // parsing the existing notebook tree.
@@ -119,7 +119,7 @@ if(!empty($nbid)){
         if($newFolderExists) {
             // if REDCap folder exists in the Notebook, then add a new page, under the REDCap folder, to host the incoming report.
 
-            $module->addRECapFolderOrPageToNotebook($userUID, $nbid, $parent_tree_id, $call_type = "notebook", "false", $pageName);
+            $module->addRECapFolderOrPageToNotebook($userUID, $nbid, "false", $pageName, $parent_tree_id, $call_type = "notebook");
             // Get the page id (which is used for parent_tree_id or pid) of the newly create page in the REDCap Folder
             // Unfortunately, the page id is not returned on the LA API call that creates it and must be found by
             // parsing the existing notebook tree.
@@ -140,7 +140,7 @@ if(!empty($nbid)){
                     $pid = $noteBookFolders2["level-nodes"]["level-node"]["tree-id"];
                     $expires = number_format(microtime(true) * 1000, 0, "", "");
                     $sig = $module->build_signature("add_attachment", $expires, "notebook");
-                    $module->labArcAddAttachment($userUID, $filename, $module->LA_AKID, $caption, $nbid, $pid, $expires, $sig);
+                    $module->labArcAddAttachment($userUID, $filename, $module->LA_AKID, $caption, $expires, $sig, $nbid, $pid);
 
                 }
                 return;
@@ -157,7 +157,7 @@ if(!empty($nbid)){
                             $pid = $nbDetails["tree-id"];
                             $expires = number_format(microtime(true)*1000,0,"","");
                             $sig= $module->build_signature("add_attachment", $expires, "notebook");
-                            $module->labArcAddAttachment($userUID, $filename, $module->LA_AKID, $caption, $nbid, $pid, $expires, $sig);
+                            $module->labArcAddAttachment($userUID, $filename, $module->LA_AKID, $caption, $expires, $sig, $nbid, $pid);
 
                         }
 
