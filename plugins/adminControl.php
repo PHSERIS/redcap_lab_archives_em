@@ -26,7 +26,7 @@ $removeSettings = $module->getUrl("plugins/removeSettings.php", $noAuth = false,
 <hr>
 
 <?php
-if($_GET['note']==1){
+if(array_key_exists('note', $_GET) && $_GET['note']==1){
     ?>
     <div id="actionMsg" class="green" style="max-width: 800px; padding: 15px 25px; margin: 20px 0px; text-align: left; display: none;">
         <span>Request successfully completed</span>

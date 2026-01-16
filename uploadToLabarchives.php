@@ -128,7 +128,8 @@ class uploadToLabarchives extends \ExternalModules\AbstractExternalModule
 
         $cssFile = $this->getUrl("css/laModal.css", $noAuth = false, $useApiEndpoint = false);
 
-        if (strlen(strstr(PAGE,"DataExport/index.php")) > 0
+        if ($this-> isSessionCurrent()
+            and strlen(strstr(PAGE,"DataExport/index.php")) > 0
             and $_GET['pid'] == $project_id
             and !is_null( htmlspecialchars($_GET['report_id'],ENT_QUOTES) )){
 
@@ -136,7 +137,11 @@ class uploadToLabarchives extends \ExternalModules\AbstractExternalModule
 
             $modalContent = $this->minifier($this->modalContent($project_id));
 
-            $autoOpenModal = $_GET['s'] == 1 && is_null($_GET['t']) ? '' : 'closed';
+            $autoOpenModal = 'closed';
+            if(array_key_exists('s',$_GET) && array_key_exists('t',$_GET)){
+                $autoOpenModal = $_GET['s'] == 1 && is_null($_GET['t']) ? '' : 'closed';
+            }
+
 
             $scriptExport = <<<SCRIPT
 <script type="text/javascript"> 
@@ -191,7 +196,7 @@ openButton.addEventListener("click", function() {
 SCRIPT;
             print $scriptExport;
 
-            if($_GET['t']==2){
+            if(array_key_exists('t', $_GET) && $_GET['t']==2){
                 $this->successfulTransfer();
             }
         }
@@ -477,7 +482,8 @@ SCRIPT;
         $json = json_encode($xml);
         $array = json_decode($json,TRUE);
 
-        if(!is_null($array["level-nodes"]["level-node"][0])) {
+        if(array_key_exists(0, $array["level-nodes"]["level-node"]) &&
+            !is_null($array["level-nodes"]["level-node"][0])) {
             foreach ($array["level-nodes"]["level-node"] as $k => $v) {
                 if ($v["is-page"] == "false" && $v["user-access"]["can-write"] == "true") {
                     $folderList[$k] = array("id" => $v["tree-id"], "name" => $v["display-text"]);
@@ -514,7 +520,7 @@ SCRIPT;
 
     }
 
-    function labArcAddAttachment($uid, $filename, $akid, $caption, $nbid = '', $pid = '', $expires, $sig){
+    function labArcAddAttachment($uid, $filename, $akid, $caption, $expires, $sig, $nbid = '', $pid = ''){
         $fileContent =file_get_contents(APP_PATH_TEMP . $filename);
         $la_api_url = $this->getLAAPIURL();
         if($nbid != '' && $pid != ''){
@@ -544,7 +550,7 @@ SCRIPT;
         curl_close($curl);
     }
 
-    function addRECapFolderOrPageToNotebook($uid,$nbid,$parent_tree_id = 0,$call_type = "notebook",$is_folder,$display_text){
+    function addRECapFolderOrPageToNotebook($uid,$nbid,$is_folder,$display_text,$parent_tree_id = 0,$call_type = "notebook"){
         $api_class = "tree_tools";
         $api_call = "insert_node";
         $email = NULL;
@@ -604,8 +610,15 @@ SCRIPT;
     }
 
     function modalContent($project_id){
-        $userInfo =json_decode(stripslashes($this->getSystemSetting(USERID)), TRUE);
-        $userUID = $this->decrypt_config_string($userInfo[USERID]['UID']);
+        global $user_rights;
+        
+        if(!is_null($this->getSystemSetting($user_rights["username"]))){
+            $userInfo =json_decode(stripslashes($this->getSystemSetting($user_rights["username"])), TRUE);
+            $userUID = $this->decrypt_config_string($userInfo[$user_rights["username"]]['UID']);
+        } else {
+            $userInfo = NULL;
+            $userUID = '';
+        }
 
         $noticeLanguage = "<div style=\'bottom: -10px;position: relative;\'>
         <div class=\'notice\'>
@@ -647,8 +660,8 @@ SCRIPT;
 
         // UI for Basic Account Setup
         if(is_null($userInfo) || $userUID == "") {
-            $email = $userInfo[USERID]['userEmail'];
-            $pass = $userInfo[USERID]['appPas'];
+            $email = ''; //$email = $userInfo[USERID]['userEmail'];
+            $pass = '' ; //$pass = $userInfo[USERID]['appPas'];
             $RegionSelect = $this->dropdownMenu('regionSelect', $this->getRegionList(), 'Select Region: ');;
             $setup = "<div class=\'modal-guts\'>    <div>		
         Setup a link to your LabArchives account. Follow the steps below:</div> <hr><p>
@@ -686,7 +699,7 @@ SCRIPT;
             $saveLink = $this->getUrl("plugins/saveSettings.php", $noAuth = false, $useApiEndpoint = false);
             $removeSettings = $this->getUrl("plugins/removeSettings.php", $noAuth = false, $useApiEndpoint = false);
 
-            $tempID = USERID;
+            $tempID = $user_rights["username"];
             $linkScript = <<<SCRIPT
 <script>
 function linkNow(){
@@ -768,14 +781,14 @@ SCRIPT;
             return $setup;
         } else {
             //
-            $selectedRegion = $userInfo[USERID]['region'];
+            $selectedRegion = $userInfo[$user_rights["username"]]['region'];
             // Set required variables
             $this->setLAAPIURL($selectedRegion);
             $this->setLAAKID($selectedRegion);
             $this->setLA_SSO_ENTITY_ID($selectedRegion);
             $this->setLA_PWD($selectedRegion);
 
-            $notebookURL = $this->get_notebook_list($userUID,$userInfo[USERID]['userEmail']);
+            $notebookURL = $this->get_notebook_list($userUID,$userInfo[$user_rights["username"]]['userEmail']);
 
             $xml = simplexml_load_string(trim($this->curlShell('GET', $notebookURL)), "SimpleXMLElement", LIBXML_NOCDATA);
 
@@ -798,7 +811,7 @@ SCRIPT;
 
             $transferLink = $this->getUrl("plugins/transfer.php", $noAuth = false, $useApiEndpoint = false);
             $removeSettings = $this->getUrl("plugins/removeSettings.php", $noAuth = false, $useApiEndpoint = false);
-            $tempID = USERID;
+            $tempID = $user_rights["username"];
 
             $transferScript = <<<SCRIPT
 <script type="text/javascript">   
@@ -960,5 +973,13 @@ SCRIPT;
 
         curl_close($curl);
         return $response;
+    }
+
+    function isSessionCurrent(){
+        if(session_status() == PHP_SESSION_ACTIVE){
+            return true;
+        } else {
+            return false;
+        }
     }
 }
